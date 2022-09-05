@@ -13,7 +13,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref,onBeforeMount, onMounted} from 'vue'
+import { ref,onBeforeMount, onMounted, onBeforeUnmount} from 'vue'
 import axios from "axios"
 import * as echarts from 'echarts'
 const fontSize = function (res) {
@@ -42,10 +42,14 @@ onBeforeMount(() => {
     },[])
     result.value = arr[0]
 })
+
 const initLeftChartBottom = () => {
-    let myChart1 = echarts.init(document.getElementById("leftChartBottom1"))
-    let myChart2 = echarts.init(document.getElementById("leftChartBottom2"))
-    let myChart3 = echarts.init(document.getElementById("leftChartBottom3"))
+    window.myChart1LeftChartBottom = {}
+    window.myChart2LeftChartBottom = {}
+    window.myChart3LeftChartBottom = {}
+    window.myChart1LeftChartBottom = echarts.init(document.getElementById("leftChartBottom1"))
+    window.myChart2LeftChartBottom = echarts.init(document.getElementById("leftChartBottom2"))
+    window.myChart3LeftChartBottom = echarts.init(document.getElementById("leftChartBottom3"))
     // 绘制图表
     const option1 = {
         series: [
@@ -265,12 +269,17 @@ const initLeftChartBottom = () => {
             }
         ]
     }
-    myChart1.setOption(option1);
-    myChart2.setOption(option2);
-    myChart3.setOption(option3);
+    window.myChart1LeftChartBottom.setOption(option1);
+    window.myChart2LeftChartBottom.setOption(option2);
+    window.myChart3LeftChartBottom.setOption(option3);
 }
 onMounted(() => {
     initLeftChartBottom()
+})
+onBeforeUnmount(() => {
+    window.myChart1LeftChartBottom.dispose()
+    window.myChart2LeftChartBottom.dispose()
+    window.myChart3LeftChartBottom.dispose()
 })
 </script>
 <style>

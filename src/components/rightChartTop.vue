@@ -11,7 +11,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref,onBeforeMount, onMounted} from 'vue'
+import { ref,onBeforeMount, onMounted, onBeforeUnmount} from 'vue'
 import axios from "axios"
 import * as echarts from 'echarts'
 const fontSize = function (res) {
@@ -41,10 +41,11 @@ onBeforeMount(() => {
     },{})
     monthData.value = arr1
 })
+window.myChartRightChartTop = {}
 const initRightChartsTop = () => {
-    let myChart = echarts.init(document.getElementById("rightChartTop"))
+    window.myChartRightChartTop = echarts.init(document.getElementById("rightChartTop"))
     // 绘制图表
-    myChart.setOption({
+    window.myChartRightChartTop.setOption({
         xAxis: {
             type: 'category',
             boundaryGap: false,
@@ -79,10 +80,11 @@ const initRightChartsTop = () => {
 
         },
         grid: {
-            left: 30,  // 上
-            right: 30, // 右
+            left: 10,  // 上
+            right: 20, // 右
             top: 30,  // 下
-            bottom: 30 // 左
+            bottom: 10, // 左
+            containLabel: true
         },
         series: [
             {
@@ -106,6 +108,9 @@ const initRightChartsTop = () => {
 }
 onMounted(() => {
     initRightChartsTop()
+})
+onBeforeUnmount(() => {
+    window.myChartRightChartTop.dispose()
 })
 </script>
 <style>

@@ -3,8 +3,8 @@
         <div class="title">
             <div>本年度中医体质分布</div>
             <div>单位：人</div>
-            <div style="cursor: pointer;" @click="toggle('line')" v-if="type === 'bar'"><img src="../../public/assets/img/charts-title-right-bg.png">折线图</div>
-            <div style="cursor: pointer;" @click="toggle('bar')" v-if="type === 'line'"><img src="../../public/assets/img/charts-title-right-bg1.png">柱形图</div>
+            <div style="cursor: pointer;" @click="toggle('line')" v-if="type === 'bar'"><img src="../assets/img/charts-title-right-bg.png">折线图</div>
+            <div style="cursor: pointer;" @click="toggle('bar')" v-if="type === 'line'"><img src="../assets/img/charts-title-right-bg1.png">柱形图</div>
         </div>
         <div class="charts" id="leftChartCenter">
 
@@ -12,7 +12,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, onBeforeMount, onMounted } from 'vue'
+import { ref, onBeforeMount, onMounted ,onBeforeUnmount} from 'vue'
 import axios from "axios"
 import * as echarts from 'echarts'
 const fontSize = function (res) {
@@ -50,9 +50,10 @@ const toggle = str => {
     initLeftChartsCenter()
 }
 const initLeftChartsCenter = () => {
-    let myChart = echarts.init(document.getElementById("leftChartCenter"))
+    window.myChartLeftChartCenter = {}
+    window.myChartLeftChartCenter = echarts.init(document.getElementById("leftChartCenter"))
     // 绘制图表
-    myChart.setOption({
+    window.myChartLeftChartCenter.setOption({
         xAxis: {
             type: 'category',
             boundaryGap: type.value === 'bar',
@@ -88,10 +89,11 @@ const initLeftChartsCenter = () => {
 
         },
         grid: {
-            left: 30,  // 上
-            right: 30, // 右
+            left: 10,  // 上
+            right: 20, // 右
             top: 30,  // 下
-            bottom: 30 // 左
+            bottom: 10, // 左
+            containLabel: true
         },
         color: [type.value === 'bar' ? '#5CFAFF' : '#0E9CFF'],
         barWidth: fontSize(25),
@@ -117,6 +119,9 @@ const initLeftChartsCenter = () => {
 }
 onMounted(() => {
     initLeftChartsCenter()
+})
+onBeforeUnmount(() => {
+    window.myChartLeftChartCenter.dispose()
 })
 </script>
 <style>

@@ -3,8 +3,8 @@
         <div class="title">
             <div>本年度体检人群分布</div>
             <div>单位：人</div>
-            <div style="cursor: pointer;" @click="toggle('line')" v-if="type === 'bar'"><img src="../../public/assets/img/charts-title-right-bg1.png">折线图</div>
-            <div style="cursor: pointer;" @click="toggle('bar')" v-if="type === 'line'"><img src="../../public/assets/img/charts-title-right-bg.png">柱形图</div>
+            <div style="cursor: pointer;" @click="toggle('line')" v-if="type === 'bar'"><img src="../assets/img/charts-title-right-bg1.png">折线图</div>
+            <div style="cursor: pointer;" @click="toggle('bar')" v-if="type === 'line'"><img src="../assets/img/charts-title-right-bg.png">柱形图</div>
         </div>
         <div class="charts" id="leftChartTop">
 
@@ -12,7 +12,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, onBeforeMount, onMounted, watch } from 'vue'
+import { ref, reactive, onBeforeMount, onMounted, watch, onBeforeUnmount } from 'vue'
 import * as echarts from 'echarts'
 const fontSize = function (res) {
     let clientWidth = window.innerWidth || document.documentElement.clientWidth || document.body.clientWidth;
@@ -41,12 +41,13 @@ onBeforeMount(() => {
     }, [])
     result.value = arr[0]
 })
-const type = ref('line')
+const type = ref('bar')
 const toggle = str => {
     type.value = str
     initLeftChartsTop()
 }
 const initLeftChartsTop = () => {
+    window.myChartLeftChartTop = {}
     let option = {
         xAxis: {
             type: 'category',
@@ -83,10 +84,11 @@ const initLeftChartsTop = () => {
 
         },
         grid: {
-            left: 30,  // 上
-            right: 30, // 右
+            left: 10,  // 上
+            right: 20, // 右
             top: 30,  // 下
-            bottom: 30 // 左
+            bottom: 10, // 左
+            containLabel: true
         },
         color: [type.value === 'bar' ? '#5CFAFF' : '#0E9CFF'],
         series: [
@@ -109,14 +111,16 @@ const initLeftChartsTop = () => {
             }
         ]
     }
-    let myChart = echarts.init(document.getElementById("leftChartTop"))
-    myChart.setOption({
+    window.myChartLeftChartTop = echarts.init(document.getElementById("leftChartTop"))
+    window.myChartLeftChartTop.setOption({
         ...option
     })
 }
 onMounted(() => {
     initLeftChartsTop()
-
+})
+onBeforeUnmount(() => {
+    window.myChartLeftChartTop.dispose()
 })
 </script>
 <style>

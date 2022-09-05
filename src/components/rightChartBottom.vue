@@ -11,7 +11,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref,onBeforeMount, onMounted} from 'vue'
+import { ref,onBeforeMount, onMounted, onBeforeUnmount} from 'vue'
 import axios from "axios"
 import * as echarts from 'echarts'
 const fontSize = function (res) {
@@ -42,10 +42,11 @@ onBeforeMount(() => {
     },[])
     result.value = arr[0]
 })
+window.myChartRightChartBottom = {}
 const initRightChartsBottom = () => {
     console.log(result.value)
-    let myChart = echarts.init(document.getElementById("rightChartBottom"))
-   myChart.setOption({
+    window.myChartRightChartBottom = echarts.init(document.getElementById("rightChartBottom"))
+    window.myChartRightChartBottom.setOption({
         xAxis: {
             type: 'category',
             data: ['BMI', '血压', '血糖', '血脂', '肝功', '心电', 'B超'],
@@ -80,10 +81,11 @@ const initRightChartsBottom = () => {
             }
         },
         grid: {
-            left: 30,  // 上
-            right: 30, // 右
+            left: 10,  // 上
+            right: 20, // 右
             top: 30,  // 下
-            bottom: 30 // 左
+            bottom: 10, // 左
+            containLabel: true
         },
         color: ['#5CFAFF'],
         series: [
@@ -105,6 +107,9 @@ const initRightChartsBottom = () => {
 }
 onMounted(() => {
     initRightChartsBottom()
+})
+onBeforeUnmount(() => {
+    window.myChartRightChartBottom.dispose()
 })
 </script>
 <style>

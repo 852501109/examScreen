@@ -32,7 +32,6 @@ export default {
             username: "",
             passwd: "",
         });
-
         const rules = {
             username: [
                 {
@@ -48,14 +47,11 @@ export default {
         const login = ref(null);
         const submitForm = () => {
             login.value.validate((valid) => {
-                sessionStorage.setItem("userInfo", JSON.stringify({name: '南充市'}));
-                router.push("/");
                 if (valid) {
                     loginApi(param).then(res => {
                         if(res.code === "200") {
                             sessionStorage.setItem("userInfo", JSON.stringify(res.data));
                             router.push("/");
-                            
                         } else {
                             ElMessage.error(res.msg)
                         }
@@ -97,7 +93,7 @@ export default {
     position: relative;
     width: 100%;
     height: 100%;
-    background-image: url(../../public/assets/img/denglu.gif);
+    background-image: url(/assets/img/denglu.gif);
     background-size: 100%;
 }
 .ms-title {
@@ -125,7 +121,7 @@ export default {
     width: 12.5rem /* 200/16 */;
     height: 3.75rem /* 60/16 */;
     line-height: 3.75rem;
-    background-image: url('../../public/assets/img/btn-bg.png');
+    background-image: url('@/assets/img/btn-bg_bmp.bmp');
     background-repeat: no-repeat;
     background-size: 100% 90%;
     background-position: 30% 30%;

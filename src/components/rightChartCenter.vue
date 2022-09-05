@@ -18,7 +18,7 @@
     </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onBeforeMount, onMounted, nextTick } from 'vue'
+import { ref, reactive, onBeforeMount, onMounted, nextTick, onBeforeUnmount } from 'vue'
 import axios from "axios"
 import * as echarts from 'echarts'
 const fontSize = function (res) {
@@ -64,6 +64,7 @@ const toggle = type => {
     console.log(showBars)
     initRightChartsCenter()
 }
+window.myChartRightChartCenter = {}
 const initRightChartsCenter = () => {
     const option = {
         xAxis: {
@@ -100,10 +101,11 @@ const initRightChartsCenter = () => {
         },
         color: ['#5CFAFF', '#FF7723'],
         grid: {
-            left: 30,  // 上
-            right: 30, // 右
+            left: 10,  // 上
+            right: 20, // 右
             top: 30,  // 下
-            bottom: 30 // 左
+            bottom: 10, // 左
+            containLabel: true
         },
         series: [
             {
@@ -117,12 +119,15 @@ const initRightChartsCenter = () => {
             }
         ]
     }
-    let myChart = echarts.init(document.getElementById("rightChartCenter"))
+    window.myChartRightChartCenter = echarts.init(document.getElementById("rightChartCenter"))
     // 绘制图表
-    myChart.setOption(option);
+    window.myChartRightChartCenter.setOption(option);
 }
 onMounted(() => {
     initRightChartsCenter()
+})
+onBeforeUnmount(() => {
+    window.myChartRightChartCenter.dispose()
 })
 </script>
 <style>
